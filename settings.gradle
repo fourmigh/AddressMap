@@ -1,0 +1,4 @@
+include ':app'
+
+include ':AreaPickerLibrary'
+project(':AreaPickerLibrary').projectDir = new File(settingsDir, '../CaojunLibrary/AreaPickerLibrary')
