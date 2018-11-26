@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AddressMap</string>
+    <string name="app_name">地址侠</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
     <string name="tab_text_3">Tab 3</string>

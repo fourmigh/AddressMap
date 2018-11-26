@@ -2,3 +2,6 @@ include ':app'
 
 include ':AreaPickerLibrary'
 project(':AreaPickerLibrary').projectDir = new File(settingsDir, '../CaojunLibrary/AreaPickerLibrary')
+
+include ':AdapterLibrary'
+project(':AdapterLibrary').projectDir = new File(settingsDir, '../CaojunLibrary/AdapterLibrary')
