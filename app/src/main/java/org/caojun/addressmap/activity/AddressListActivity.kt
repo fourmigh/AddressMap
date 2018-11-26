@@ -1,10 +1,10 @@
 package org.caojun.addressmap.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.layout_list.*
+import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.adapter.CommonAdapter
 import org.caojun.adapter.bean.AdapterItem
 import org.caojun.addressmap.R
@@ -15,7 +15,7 @@ import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.uiThread
 
-class AddressListActivity : AppCompatActivity() {
+class AddressListActivity : BaseAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

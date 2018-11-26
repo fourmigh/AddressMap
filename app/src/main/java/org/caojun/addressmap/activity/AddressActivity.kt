@@ -1,7 +1,6 @@
 package org.caojun.addressmap.activity
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.amap.api.services.geocoder.GeocodeResult
@@ -15,12 +14,11 @@ import org.caojun.areapicker.AreaPicker
 import org.caojun.areapicker.OnPickerClickListener
 import org.caojun.areapicker.PickerData
 import org.jetbrains.anko.doAsync
-import android.R.attr.name
 import com.amap.api.services.geocoder.GeocodeQuery
+import org.caojun.activity.BaseAppCompatActivity
 
 
-
-class AddressActivity : AppCompatActivity() {
+class AddressActivity : BaseAppCompatActivity() {
 
     companion object {
         const val Key_Site = "Key_Site"

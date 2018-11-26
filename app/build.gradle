@@ -43,6 +43,7 @@ dependencies {
     implementation 'com.luhuiguo:chinese-utils:1.0'
     implementation 'com.github.zhaokaiqiang.klog:library:1.6.0'
     implementation 'org.jetbrains.anko:anko-common:0.10.8'
+    implementation project(':UtilsLibrary')
     implementation project(':AreaPickerLibrary')
     implementation project(':AdapterLibrary')
 }

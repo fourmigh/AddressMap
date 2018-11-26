@@ -2,7 +2,6 @@ package org.caojun.addressmap.activity
 
 import android.graphics.Color
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -12,18 +11,22 @@ import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.LocationSource
 import com.amap.api.maps.model.*
 import kotlinx.android.synthetic.main.activity_map.*
+import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.addressmap.R
 import org.caojun.addressmap.room.Site
 import org.caojun.addressmap.room.SiteDatabase
+import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.startActivity
 
-class MapActivity : AppCompatActivity(), LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
+class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
 
 
     private var mLocationChangedListener: LocationSource.OnLocationChangedListener? = null
     private var mLocationClient: AMapLocationClient? = null
     private var mLocationOption: AMapLocationClientOption? = null
+
+    private val hmMarkerSite = HashMap<Marker, Site>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,6 +119,20 @@ class MapActivity : AppCompatActivity(), LocationSource, AMapLocationListener, A
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
+        val site = hmMarkerSite[marker]!!
+        alert {
+            title = site.name
+            message = "导航、修改、打电话？"
+            positiveButton("打电话") {
+                call(site.mobile)
+            }
+            neutralPressed("导航") {
+
+            }
+            negativeButton("修改") {
+                startActivity<AddressActivity>(AddressActivity.Key_Site to site)
+            }
+        }.show()
         return true
     }
 
@@ -123,12 +140,10 @@ class MapActivity : AppCompatActivity(), LocationSource, AMapLocationListener, A
         doAsync {
             val list = SiteDatabase.getDatabase(this@MapActivity).getSiteDao().queryAll()
             val aMap = mapView.map
-            if (list.isEmpty()) {
-                aMap.clear()
-            } else {
-                for (i in list.indices) {
-                    addMarkerToMap(aMap, list[i])
-                }
+            aMap.clear()
+            hmMarkerSite.clear()
+            for (i in list.indices) {
+                addMarkerToMap(aMap, list[i])
             }
         }
     }
@@ -146,5 +161,7 @@ class MapActivity : AppCompatActivity(), LocationSource, AMapLocationListener, A
             .draggable(true)
         val marker = aMap.addMarker(markerOption)
         marker?.showInfoWindow()
+
+        hmMarkerSite[marker] = site
     }
 }

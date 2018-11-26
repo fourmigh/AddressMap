@@ -5,6 +5,7 @@ import android.text.TextUtils
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.adapter.bean.AdapterItem
 import org.caojun.addressmap.R
 import org.caojun.addressmap.activity.AddressActivity
@@ -39,6 +40,10 @@ class SiteItem(private val context: Context): AdapterItem<Site> {
             btnMobile?.visibility = View.GONE
         } else {
             btnMobile?.visibility = View.VISIBLE
+
+            btnMobile?.setOnClickListener {
+                (context as BaseAppCompatActivity).call(t.mobile)
+            }
         }
 
         if (TextUtils.isEmpty(btnAddress?.text)) {
