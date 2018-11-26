@@ -19,6 +19,8 @@ class Site : Parcelable {
     var mobile: String = ""//手机号
     var area: String = ""//所在地区（省市区）
     var address: String = ""//详细地址
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeInt(id)
@@ -26,6 +28,8 @@ class Site : Parcelable {
         dest.writeString(mobile)
         dest.writeString(area)
         dest.writeString(address)
+        dest.writeDouble(latitude)
+        dest.writeDouble(longitude)
     }
 
     override fun describeContents(): Int {
@@ -40,6 +44,8 @@ class Site : Parcelable {
         mobile = _in.readString()
         area = _in.readString()
         address = _in.readString()
+        latitude = _in.readDouble()
+        longitude = _in.readDouble()
     }
 
     companion object CREATOR : Parcelable.Creator<Site> {

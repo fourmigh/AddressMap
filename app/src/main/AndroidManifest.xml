@@ -30,6 +30,9 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.AddressListActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity android:name=".activity.AddressActivity"
                   android:theme="@style/AppTheme.NoActionBar"/>
 

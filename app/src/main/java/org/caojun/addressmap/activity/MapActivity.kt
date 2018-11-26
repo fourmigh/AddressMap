@@ -10,17 +10,16 @@ import com.amap.api.location.AMapLocationListener
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.LocationSource
-import com.amap.api.maps.model.Marker
-import com.amap.api.maps.model.MyLocationStyle
+import com.amap.api.maps.model.*
 import kotlinx.android.synthetic.main.activity_map.*
 import org.caojun.addressmap.R
-import org.jetbrains.anko.startActivityForResult
+import org.caojun.addressmap.room.Site
+import org.caojun.addressmap.room.SiteDatabase
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.startActivity
 
 class MapActivity : AppCompatActivity(), LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
 
-    companion object {
-        const val RequestCode_Address = 1
-    }
 
     private var mLocationChangedListener: LocationSource.OnLocationChangedListener? = null
     private var mLocationClient: AMapLocationClient? = null
@@ -34,13 +33,15 @@ class MapActivity : AppCompatActivity(), LocationSource, AMapLocationListener, A
         initialize()
 
         fab.setOnClickListener { view ->
-            startActivityForResult<AddressActivity>(RequestCode_Address)
+            startActivity<AddressListActivity>()
         }
     }
 
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+
+        addMarkersToMap()
     }
 
     override fun onPause() {
@@ -116,5 +117,34 @@ class MapActivity : AppCompatActivity(), LocationSource, AMapLocationListener, A
 
     override fun onMarkerClick(marker: Marker): Boolean {
         return true
+    }
+
+    private fun addMarkersToMap() {
+        doAsync {
+            val list = SiteDatabase.getDatabase(this@MapActivity).getSiteDao().queryAll()
+            val aMap = mapView.map
+            if (list.isEmpty()) {
+                aMap.clear()
+            } else {
+                for (i in list.indices) {
+                    addMarkerToMap(aMap, list[i])
+                }
+            }
+        }
+    }
+
+    private fun addMarkerToMap(aMap: AMap, site: Site) {
+
+        val latLng = LatLng(site.latitude, site.longitude)
+
+        val markerOption = MarkerOptions().icon(
+            BitmapDescriptorFactory
+                .defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+            .position(latLng)
+            .title(site.name)
+            .snippet(site.mobile + "\n" + site.address)
+            .draggable(true)
+        val marker = aMap.addMarker(markerOption)
+        marker?.showInfoWindow()
     }
 }

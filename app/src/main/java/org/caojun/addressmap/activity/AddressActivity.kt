@@ -4,6 +4,9 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.amap.api.services.geocoder.GeocodeResult
+import com.amap.api.services.geocoder.GeocodeSearch
+import com.amap.api.services.geocoder.RegeocodeResult
 import kotlinx.android.synthetic.main.layout_address.*
 import org.caojun.addressmap.R
 import org.caojun.addressmap.room.Site
@@ -12,6 +15,10 @@ import org.caojun.areapicker.AreaPicker
 import org.caojun.areapicker.OnPickerClickListener
 import org.caojun.areapicker.PickerData
 import org.jetbrains.anko.doAsync
+import android.R.attr.name
+import com.amap.api.services.geocoder.GeocodeQuery
+
+
 
 class AddressActivity : AppCompatActivity() {
 
@@ -80,12 +87,34 @@ class AddressActivity : AppCompatActivity() {
             site?.area = btnArea.text.toString()
             site?.address = etAddress.text.toString()
 
-            if (isNew) {
-                SiteDatabase.getDatabase(this@AddressActivity).getSiteDao().insert(site!!)
-            } else {
-                SiteDatabase.getDatabase(this@AddressActivity).getSiteDao().update(site!!)
-            }
-            finish()
+            searchGEO(isNew, site!!)
         }
+    }
+
+    private fun searchGEO(isNew: Boolean, site: Site) {
+        val geocodeSearch = GeocodeSearch(this)
+        geocodeSearch.setOnGeocodeSearchListener(object : GeocodeSearch.OnGeocodeSearchListener {
+            override fun onRegeocodeSearched(result: RegeocodeResult, rCode: Int) {
+
+            }
+
+            override fun onGeocodeSearched(result: GeocodeResult, rCode: Int) {
+                val latlon = result.geocodeAddressList[0].latLonPoint
+                site.latitude = latlon.latitude
+                site.longitude = latlon.longitude
+
+                doAsync {
+
+                    if (isNew) {
+                        SiteDatabase.getDatabase(this@AddressActivity).getSiteDao().insert(site)
+                    } else {
+                        SiteDatabase.getDatabase(this@AddressActivity).getSiteDao().update(site)
+                    }
+                    finish()
+                }
+            }
+        })
+        val query = GeocodeQuery(site.address, site.area)
+        geocodeSearch.getFromLocationNameAsyn(query)
     }
 }
