@@ -1,5 +1,6 @@
 package org.caojun.addressmap.activity
 
+import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
 import com.amap.api.location.AMapLocation
@@ -15,6 +16,7 @@ import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.addressmap.R
 import org.caojun.addressmap.room.Site
 import org.caojun.addressmap.room.SiteDatabase
+import org.caojun.utils.ActivityUtils
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.startActivity
@@ -44,7 +46,14 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
         super.onResume()
         mapView.onResume()
 
-        addMarkersToMap()
+        checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION, object : ActivityUtils.RequestPermissionListener {
+            override fun onSuccess() {
+                addMarkersToMap()
+            }
+
+            override fun onFail() {
+            }
+        })
     }
 
     override fun onPause() {
@@ -119,20 +128,24 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        val site = hmMarkerSite[marker]!!
-        alert {
-            title = site.name
-            message = "导航、修改、打电话？"
-            positiveButton("打电话") {
-                call(site.mobile)
-            }
-            neutralPressed("导航") {
+        if (marker.isInfoWindowShown) {
+            val site = hmMarkerSite[marker]!!
+            alert {
+                title = site.name
+                message = "导航、修改、打电话？"
+                positiveButton("打电话") {
+                    call(site.mobile)
+                }
+                neutralPressed("导航") {
 
-            }
-            negativeButton("修改") {
-                startActivity<AddressActivity>(AddressActivity.Key_Site to site)
-            }
-        }.show()
+                }
+                negativeButton("修改") {
+                    startActivity<AddressActivity>(AddressActivity.Key_Site to site)
+                }
+            }.show()
+        } else {
+            marker.showInfoWindow()
+        }
         return true
     }
 
