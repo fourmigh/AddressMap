@@ -1,14 +1,9 @@
 <resources>
-    <string name="app_name">地址侠</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
-    <string name="contact_name">联系人</string>
-    <string name="contact_mobile">手机号码</string>
-    <string name="contact_area">所在地区</string>
-    <string name="contact_address">详细地址</string>
-    <string name="contact_save">保存</string>
-    <string name="contact_add">添加</string>
+    <string name="app_name">Address Man</string>
+    <string name="contact_name">Contact</string>
+    <string name="contact_mobile">Mobile</string>
+    <string name="contact_area">Area</string>
+    <string name="contact_address">Address</string>
+    <string name="contact_save">Save</string>
+    <string name="contact_add">Add</string>
 </resources>

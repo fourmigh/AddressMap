@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">地址俠</string>
+    <string name="contact_name">連絡人</string>
+    <string name="contact_mobile">手機號碼</string>
+    <string name="contact_area">所在地區</string>
+    <string name="contact_address">詳細地址</string>
+    <string name="contact_save">保存</string>
+    <string name="contact_add">添加</string>
+</resources>
