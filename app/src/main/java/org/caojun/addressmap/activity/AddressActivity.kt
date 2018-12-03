@@ -42,7 +42,7 @@ class AddressActivity : BaseAppCompatActivity() {
                 btnArea.text = pickerData.selectText
                 AreaPicker.dismiss()
             }
-        })
+        }, "上海市")
 
         site = intent.getParcelableExtra(Key_Site)
         if (site != null) {
