@@ -132,14 +132,14 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
             val site = hmMarkerSite[marker]!!
             alert {
                 title = site.name
-                message = "导航、修改、打电话？"
-                positiveButton("打电话") {
+                messageResource = R.string.navigate_modify_call
+                positiveButton(R.string.call) {
                     call(site.mobile)
                 }
-                neutralPressed("导航") {
+                neutralPressed(R.string.navigate) {
 
                 }
-                negativeButton("修改") {
+                negativeButton(R.string.modify) {
                     startActivity<AddressActivity>(AddressActivity.Key_Site to site)
                 }
             }.show()
