@@ -22,6 +22,7 @@ class AddressActivity : BaseAppCompatActivity() {
 
     companion object {
         const val Key_Site = "Key_Site"
+        const val Key_Province = "Key_Province"
     }
 
     private var site: Site? = null
@@ -31,6 +32,8 @@ class AddressActivity : BaseAppCompatActivity() {
         setContentView(R.layout.layout_address)
 
         setSupportActionBar(toolbar)
+
+        val province = intent.getStringExtra(Key_Province)
 
         AreaPicker.init(this, btnArea, object : OnPickerClickListener {
             override fun onPickerClick(pickerData: PickerData) {
@@ -42,7 +45,7 @@ class AddressActivity : BaseAppCompatActivity() {
                 btnArea.text = pickerData.selectText
                 AreaPicker.dismiss()
             }
-        }, "上海市")
+        }, province)
 
         site = intent.getParcelableExtra(Key_Site)
         if (site != null) {

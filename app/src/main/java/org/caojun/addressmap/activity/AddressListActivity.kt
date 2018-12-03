@@ -17,11 +17,19 @@ import org.jetbrains.anko.uiThread
 
 class AddressListActivity : BaseAppCompatActivity() {
 
+    companion object {
+        const val Key_Province = "Key_Province"
+    }
+
+    private var province = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_list)
 
         setSupportActionBar(toolbar)
+
+        province = intent.getStringExtra(Key_Province)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -37,7 +45,7 @@ class AddressListActivity : BaseAppCompatActivity() {
         val id = item.itemId
 
         if (id == R.id.action_add) {
-            startActivity<AddressActivity>()
+            startActivity<AddressActivity>(AddressActivity.Key_Province to province)
             return true
         }
 

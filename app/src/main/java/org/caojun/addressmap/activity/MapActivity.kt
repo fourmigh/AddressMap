@@ -30,6 +30,8 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
 
     private val hmMarkerSite = HashMap<Marker, Site>()
 
+    private var province = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
@@ -38,7 +40,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
         initialize()
 
         fab.setOnClickListener { view ->
-            startActivity<AddressListActivity>()
+            startActivity<AddressListActivity>(AddressListActivity.Key_Province to province)
         }
     }
 
@@ -125,6 +127,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
 
     override fun onLocationChanged(amapLocation: AMapLocation) {
         mLocationChangedListener?.onLocationChanged(amapLocation)// 显示系统小蓝点
+        province = amapLocation.province
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
@@ -140,7 +143,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
 
                 }
                 negativeButton(R.string.modify) {
-                    startActivity<AddressActivity>(AddressActivity.Key_Site to site)
+                    startActivity<AddressActivity>(AddressActivity.Key_Site to site, AddressActivity.Key_Province to province)
                 }
             }.show()
         } else {
