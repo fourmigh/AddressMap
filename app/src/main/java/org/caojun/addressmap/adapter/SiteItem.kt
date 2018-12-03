@@ -10,6 +10,7 @@ import org.caojun.adapter.bean.AdapterItem
 import org.caojun.addressmap.R
 import org.caojun.addressmap.activity.AddressActivity
 import org.caojun.addressmap.room.Site
+import org.caojun.addressmap.utils.GDMapUtils
 import org.jetbrains.anko.startActivity
 
 class SiteItem(private val context: Context): AdapterItem<Site> {
@@ -50,6 +51,10 @@ class SiteItem(private val context: Context): AdapterItem<Site> {
             btnAddress?.visibility = View.GONE
         } else {
             btnAddress?.visibility = View.VISIBLE
+
+            btnAddress?.setOnClickListener {
+                GDMapUtils.doNavigate(context, context.getString(R.string.my_location), t)
+            }
         }
 
         tvName?.setOnClickListener {

@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <!--允许程序访问CellID或WiFi热点来获取粗略的位置-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 高德地图导航必须权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
             android:allowBackup="true"
@@ -46,6 +48,11 @@
                 android:value="0454f19f128b1b1fdea9a68e3e371b9d" />
         <!-- 定位需要的服务 -->
         <service android:name="com.amap.api.location.APSService" />
+
+        <!-- 高度地图导航 -->
+        <activity
+                android:name="com.amap.api.navi.AmapRouteActivity"
+                android:configChanges="orientation|keyboardHidden|screenSize" />
     </application>
 
 </manifest>
