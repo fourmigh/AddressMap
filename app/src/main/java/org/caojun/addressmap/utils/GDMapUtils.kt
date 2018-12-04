@@ -28,7 +28,10 @@ object GDMapUtils {
     }
 
     fun moveMap(site: Site) {
-        val cameraPosition = CameraPosition(LatLng(site.latitude, site.longitude), 18f, 30f, 0f)
+        val zoom = aMap?.cameraPosition?.zoom?:18f
+        val tilt = aMap?.cameraPosition?.tilt?:30f
+        val bearing = aMap?.cameraPosition?.bearing?:0f
+        val cameraPosition = CameraPosition(LatLng(site.latitude, site.longitude), zoom, tilt, bearing)
         val cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition)
         aMap?.moveCamera(cameraUpdate)
         val marker = GDMapUtils.hmSiteMarker[site.id]
