@@ -1,5 +1,6 @@
 package org.caojun.addressmap.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import android.view.View
@@ -53,7 +54,9 @@ class SiteItem(private val context: Context): AdapterItem<Site> {
             btnAddress?.visibility = View.VISIBLE
 
             btnAddress?.setOnClickListener {
-                GDMapUtils.doNavigate(context, t)
+//                GDMapUtils.doNavigate(context, t)
+                GDMapUtils.moveMap(t)
+                (context as Activity).finish()
             }
         }
 
