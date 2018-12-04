@@ -73,7 +73,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
-        GDMapUtils.clear()
+        GDMapUtils.onDestroy()
         amapLocation = null
     }
 
@@ -83,10 +83,10 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
     }
 
     private fun initialize() {
-        GDMapUtils.aMap = mapView.map
-        GDMapUtils.aMap?.uiSettings?.isRotateGesturesEnabled = true//旋转手势
-        GDMapUtils.aMap?.moveCamera(CameraUpdateFactory.zoomBy(6f))
-        GDMapUtils.aMap?.setLocationSource(this)// 设置定位监听
+        val aMap = mapView.map
+        aMap.uiSettings.isRotateGesturesEnabled = true//旋转手势
+        aMap.moveCamera(CameraUpdateFactory.zoomBy(6f))
+        aMap.setLocationSource(this)// 设置定位监听
         // 自定义系统定位蓝点
         val myLocationStyle = MyLocationStyle()
         // 自定义精度范围的圆形边框颜色
@@ -96,13 +96,15 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
         // 设置圆形的填充颜色
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0))
         // 将自定义的 myLocationStyle 对象添加到地图上
-        GDMapUtils.aMap?.myLocationStyle = myLocationStyle
-        GDMapUtils.aMap?.isMyLocationEnabled = true// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        GDMapUtils.aMap?.uiSettings?.isMyLocationButtonEnabled = true// 定位按钮
-        GDMapUtils.aMap?.uiSettings?.isTiltGesturesEnabled = true//倾斜
-        GDMapUtils.aMap?.uiSettings?.isCompassEnabled = true//指南针
-        GDMapUtils.aMap?.uiSettings?.isScaleControlsEnabled = true//比例尺
-        GDMapUtils.aMap?.setOnMarkerClickListener(this)
+        aMap.myLocationStyle = myLocationStyle
+        aMap.isMyLocationEnabled = true// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
+        aMap.uiSettings.isMyLocationButtonEnabled = true// 定位按钮
+        aMap.uiSettings.isTiltGesturesEnabled = true//倾斜
+        aMap.uiSettings.isCompassEnabled = true//指南针
+        aMap.uiSettings.isScaleControlsEnabled = true//比例尺
+        aMap.setOnMarkerClickListener(this)
+
+        GDMapUtils.setAMap(aMap)
     }
 
     override fun deactivate() {
@@ -162,7 +164,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
             val list = SiteDatabase.getDatabase(this@MapActivity).getSiteDao().queryAll()
             val aMap = mapView.map
             aMap.clear()
-            GDMapUtils.hmSiteMarker.clear()
+            GDMapUtils.clear()
             hmMarkerSite.clear()
             for (i in list.indices) {
                 addMarkerToMap(aMap, list[i])
@@ -184,7 +186,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
         val marker = aMap.addMarker(markerOption)
         marker?.showInfoWindow()
 
-        GDMapUtils.hmSiteMarker[site.id] = marker
+        GDMapUtils.setHMSiteMarker(site.id, marker)
 
         hmMarkerSite[marker] = site
     }

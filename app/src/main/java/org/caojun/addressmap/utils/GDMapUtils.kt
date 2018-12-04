@@ -13,12 +13,24 @@ import org.caojun.addressmap.room.Site
 
 object GDMapUtils {
 
-    var aMap: AMap? = null
-    var hmSiteMarker = HashMap<Int, Marker>()
+    private var aMap: AMap? = null
+    private var hmSiteMarker = HashMap<Int, Marker>()
+
+    fun onDestroy() {
+        aMap = null
+        clear()
+    }
 
     fun clear() {
-        aMap = null
         hmSiteMarker.clear()
+    }
+
+    fun setAMap(aMap: AMap) {
+        GDMapUtils.aMap = aMap
+    }
+
+    fun setHMSiteMarker(id: Int, marker: Marker) {
+        hmSiteMarker[id] = marker
     }
 
     fun doNavigate(context: Context, site: Site) {
