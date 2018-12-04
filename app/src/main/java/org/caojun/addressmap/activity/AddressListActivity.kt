@@ -21,15 +21,11 @@ class AddressListActivity : BaseAppCompatActivity() {
         const val Key_Province = "Key_Province"
     }
 
-    private var province = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_list)
 
         setSupportActionBar(toolbar)
-
-        province = intent.getStringExtra(Key_Province)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -45,6 +41,7 @@ class AddressListActivity : BaseAppCompatActivity() {
         val id = item.itemId
 
         if (id == R.id.action_add) {
+            val province = intent.getStringExtra(Key_Province)
             startActivity<AddressActivity>(AddressActivity.Key_Province to province)
             return true
         }

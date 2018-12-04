@@ -48,12 +48,10 @@ class AddressActivity : BaseAppCompatActivity() {
         }, province)
 
         site = intent.getParcelableExtra(Key_Site)
-        if (site != null) {
-            etName.setText(site?.name)
-            etMobile.setText(site?.mobile)
-            btnArea.text = site?.area
-            etAddress.setText(site?.address)
-        }
+        etName.setText(site?.name)
+        etMobile.setText(site?.mobile)
+        btnArea.text = site?.area
+        etAddress.setText(site?.address)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
