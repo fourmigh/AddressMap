@@ -13,7 +13,11 @@ import com.amap.api.maps.LocationSource
 import com.amap.api.maps.model.*
 import kotlinx.android.synthetic.main.activity_map.*
 import org.caojun.activity.BaseAppCompatActivity
+import org.caojun.adapter.CommonAdapter
+import org.caojun.adapter.bean.AdapterItem
 import org.caojun.addressmap.R
+import org.caojun.addressmap.adapter.NameItem
+import org.caojun.addressmap.adapter.SiteItem
 import org.caojun.addressmap.room.Site
 import org.caojun.addressmap.room.SiteDatabase
 import org.caojun.addressmap.utils.GDMapUtils
@@ -21,6 +25,7 @@ import org.caojun.utils.ActivityUtils
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.uiThread
 
 class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
 
@@ -53,6 +58,17 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
             override fun onFail() {
             }
         })
+
+        doAsync {
+            val list = SiteDatabase.getDatabase(this@MapActivity).getSiteDao().queryAll()
+            uiThread {
+                listView.adapter = object : CommonAdapter<Site>(list, 1) {
+                    override fun createItem(type: Any?): AdapterItem<*> {
+                        return NameItem()
+                    }
+                }
+            }
+        }
     }
 
     override fun onResume() {

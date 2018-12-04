@@ -12,7 +12,8 @@
             android:id="@+id/mapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true">
+    </com.amap.api.maps.MapView>
 
     <android.support.design.widget.FloatingActionButton
             android:id="@+id/fab"
@@ -21,5 +22,13 @@
             android:layout_gravity="start|bottom"
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@android:drawable/ic_dialog_email"/>
+
+    <ListView
+            android:id="@+id/listView"
+            android:layout_gravity="end|center"
+            android:layout_width="96dp"
+            android:layout_marginTop="@dimen/listview_margin"
+            android:layout_marginBottom="@dimen/listview_margin"
+            android:layout_height="wrap_content"/>
 
 </android.support.design.widget.CoordinatorLayout>
