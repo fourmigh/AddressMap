@@ -3,7 +3,6 @@ package org.caojun.addressmap.activity
 import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -12,10 +11,6 @@ import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.LocationSource
 import com.amap.api.maps.model.*
-import com.amap.api.navi.*
-import com.amap.api.navi.model.AMapNaviInfo
-import com.amap.api.navi.model.AMapNaviLocation
-import com.amap.api.navi.model.NaviInfo
 import kotlinx.android.synthetic.main.activity_map.*
 import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.addressmap.R
@@ -37,6 +32,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
     private val hmMarkerSite = HashMap<Marker, Site>()
 
     private var province = ""
+    private var amapLocation: AMapLocation? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,7 +73,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
-        GDMapUtils.amapLocation = null
+        amapLocation = null
     }
 
     override fun onLowMemory() {
@@ -135,7 +131,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
     override fun onLocationChanged(amapLocation: AMapLocation) {
         mLocationChangedListener?.onLocationChanged(amapLocation)// 显示系统小蓝点
         province = amapLocation.province
-        GDMapUtils.amapLocation = amapLocation
+        this.amapLocation = amapLocation
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
@@ -148,7 +144,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
                     call(site.mobile)
                 }
                 neutralPressed(R.string.navigate) {
-                    GDMapUtils.doNavigate(this@MapActivity, getString(R.string.my_location), site)
+                    GDMapUtils.doNavigate(this@MapActivity, site)
                 }
                 negativeButton(R.string.modify) {
                     startActivity<AddressActivity>(AddressActivity.Key_Site to site, AddressActivity.Key_Province to province)

@@ -53,7 +53,7 @@ class SiteItem(private val context: Context): AdapterItem<Site> {
             btnAddress?.visibility = View.VISIBLE
 
             btnAddress?.setOnClickListener {
-                GDMapUtils.doNavigate(context, context.getString(R.string.my_location), t)
+                GDMapUtils.doNavigate(context, t)
             }
         }
 
