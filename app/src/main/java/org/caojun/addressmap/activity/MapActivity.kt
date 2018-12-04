@@ -43,8 +43,8 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-        mapView.onCreate(savedInstanceState)
-        initialize()
+//        mapView.onCreate(savedInstanceState)
+//        initialize()
 
         fab.setOnClickListener { view ->
             startActivity<AddressListActivity>(AddressListActivity.Key_Province to province)
@@ -52,6 +52,8 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
 
         checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION, object : ActivityUtils.RequestPermissionListener {
             override fun onSuccess() {
+                mapView.onCreate(savedInstanceState)
+                initialize()
                 addMarkersToMap()
             }
 
