@@ -1,6 +1,9 @@
 package org.caojun.addressmap.activity
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextUtils
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import com.amap.api.services.geocoder.GeocodeResult
@@ -30,6 +33,8 @@ class AddressActivity : BaseAppCompatActivity() {
     private var areaCode = ""
     private var zipCode = ""
 
+    private var isSaveMenuEnabled = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.layout_address)
@@ -56,6 +61,27 @@ class AddressActivity : BaseAppCompatActivity() {
         etMobile.setText(site?.mobile)
         btnArea.text = site?.area
         etAddress.setText(site?.address)
+
+        val textWatcher = object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                checkSaveMenu()
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+        }
+
+        etName.addTextChangedListener(textWatcher)
+        etMobile.addTextChangedListener(textWatcher)
+        etAddress.addTextChangedListener(textWatcher)
+    }
+
+    private fun updateSaveMenu(isEnabled: Boolean) {
+        isSaveMenuEnabled = isEnabled
+        invalidateOptionsMenu()
     }
 
     private fun onPicker(pickerData: PickerData) {
@@ -64,11 +90,31 @@ class AddressActivity : BaseAppCompatActivity() {
         areaCode = pickerData.areaCode?:""
         zipCode = pickerData.zipCode?:""
         AreaPicker.dismiss()
+
+        checkSaveMenu()
+    }
+
+    private fun checkSaveMenu() {
+        val name = etName.text.toString()
+        val mobile = etMobile.text.toString()
+        val area = btnArea.text.toString()
+        val address = etAddress.text.toString()
+
+        if (site == null) {
+            updateSaveMenu(!TextUtils.isEmpty(name) || !TextUtils.isEmpty(mobile) || !TextUtils.isEmpty(mobile) || !TextUtils.isEmpty(address))
+        } else if (name != site?.name || mobile != site?.mobile || area != site?.area || address != site?.address) {
+            updateSaveMenu(true)
+        } else {
+            updateSaveMenu(false)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.menu_address, menu)
+//        menuInflater.inflate(R.menu.menu_address, menu)
+        val saveMenu = menu.add(0, R.id.action_save, 0, R.string.contact_save)
+        saveMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        saveMenu.isEnabled = isSaveMenuEnabled
         return true
     }
 
