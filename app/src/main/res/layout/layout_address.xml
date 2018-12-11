@@ -57,7 +57,8 @@
                         android:maxLength="11"
                         android:id="@+id/etMobile"/>
             </TableRow>
-            <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
+            <TableRow android:layout_width="match_parent" android:layout_height="match_parent"
+                      android:gravity="center_vertical">
                 <TextView
                         android:text="@string/contact_area"
                         android:layout_width="wrap_content"
@@ -65,8 +66,8 @@
                 <Button
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:gravity="start"
-                        android:background="?attr/editTextBackground"
+                        android:gravity="start|center_vertical"
+                        android:background="@android:drawable/editbox_background_normal"
                         android:id="@+id/btnArea"/>
             </TableRow>
             <TableRow android:layout_width="match_parent" android:layout_height="match_parent">
