@@ -19,6 +19,7 @@ import org.caojun.areapicker.OnPickerClickListener
 import org.caojun.areapicker.PickerData
 import org.jetbrains.anko.doAsync
 import com.amap.api.services.geocoder.GeocodeQuery
+import org.jetbrains.anko.alert
 
 class AddressActivity : BaseActivity() {
 
@@ -114,6 +115,11 @@ class AddressActivity : BaseActivity() {
         val saveMenu = menu.add(0, R.id.action_save, 0, R.string.contact_save)
         saveMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         saveMenu.isEnabled = isSaveMenuEnabled
+
+        if (site != null) {
+            val deleteMenu = menu.add(0, R.id.action_delete, 0, R.string.contact_delete)
+            deleteMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+        }
         return true
     }
 
@@ -128,7 +134,26 @@ class AddressActivity : BaseActivity() {
             return true
         }
 
+        if (id == R.id.action_delete) {
+            doDelete()
+            return true
+        }
+
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun doDelete() {
+        alert {
+            messageResource = R.string.confirm_delete
+            positiveButton(android.R.string.ok) {
+                doAsync {
+                    SiteDatabase.getDatabase(this@AddressActivity).getSiteDao().delete(site!!)
+                    setResult(Activity.RESULT_OK)
+                    finish()
+                }
+            }
+            negativeButton(android.R.string.cancel) {}
+        }.show()
     }
 
     private fun doSave() {

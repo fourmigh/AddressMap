@@ -7,6 +7,8 @@
     <string name="contact_address">详细地址</string>
     <string name="contact_save">保存</string>
     <string name="contact_add">添加</string>
+    <string name="contact_delete">删除</string>
+    <string name="confirm_delete">你确定要删除吗？</string>
     <string name="navigate_modify_call">导航、修改、打电话？</string>
     <string name="navigate">导航</string>
     <string name="modify">修改</string>
