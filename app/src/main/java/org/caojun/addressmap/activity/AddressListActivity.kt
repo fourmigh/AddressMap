@@ -1,10 +1,11 @@
 package org.caojun.addressmap.activity
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import kotlinx.android.synthetic.main.layout_list.*
-import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.adapter.CommonAdapter
 import org.caojun.adapter.bean.AdapterItem
 import org.caojun.addressmap.R
@@ -12,10 +13,10 @@ import org.caojun.addressmap.adapter.SiteItem
 import org.caojun.addressmap.room.Site
 import org.caojun.addressmap.room.SiteDatabase
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.uiThread
 
-class AddressListActivity : BaseAppCompatActivity() {
+class AddressListActivity : BaseActivity() {
 
     companion object {
         const val Key_Province = "Key_Province"
@@ -42,7 +43,7 @@ class AddressListActivity : BaseAppCompatActivity() {
 
         if (id == R.id.action_add) {
             val province = intent.getStringExtra(Key_Province)
-            startActivity<AddressActivity>(AddressActivity.Key_Province to province)
+            startActivityForResult<AddressActivity>(RequestCode_Address, AddressActivity.Key_Province to province)
             return true
         }
 
@@ -61,5 +62,20 @@ class AddressListActivity : BaseAppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if (isDataChanged) {
+            setResult(Activity.RESULT_OK)
+        }
+        finish()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            isDataChanged = true
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

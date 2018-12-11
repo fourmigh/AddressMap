@@ -1,6 +1,8 @@
 package org.caojun.addressmap.activity
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import com.amap.api.location.AMapLocation
@@ -12,23 +14,20 @@ import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.LocationSource
 import com.amap.api.maps.model.*
 import kotlinx.android.synthetic.main.activity_map.*
-import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.adapter.CommonAdapter
 import org.caojun.adapter.bean.AdapterItem
 import org.caojun.addressmap.R
 import org.caojun.addressmap.adapter.NameItem
-import org.caojun.addressmap.adapter.SiteItem
 import org.caojun.addressmap.room.Site
 import org.caojun.addressmap.room.SiteDatabase
 import org.caojun.addressmap.utils.GDMapUtils
 import org.caojun.utils.ActivityUtils
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.startActivity
+import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.uiThread
 
-class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
-
+class MapActivity : BaseActivity(), LocationSource, AMapLocationListener, AMap.OnMarkerClickListener {
 
     private var mLocationChangedListener: LocationSource.OnLocationChangedListener? = null
     private var mLocationClient: AMapLocationClient? = null
@@ -43,23 +42,27 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_map)
 
-//        mapView.onCreate(savedInstanceState)
-//        initialize()
-
         fab.setOnClickListener { view ->
-            startActivity<AddressListActivity>(AddressListActivity.Key_Province to province)
+            startActivityForResult<AddressListActivity>(RequestCode_AddressList, AddressListActivity.Key_Province to province)
         }
 
         checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION, object : ActivityUtils.RequestPermissionListener {
             override fun onSuccess() {
                 mapView.onCreate(savedInstanceState)
                 initialize()
-//                refreshData()
             }
 
             override fun onFail() {
             }
         })
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            refreshData()
+            return
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun refreshData() {
@@ -178,7 +181,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
                     GDMapUtils.doNavigate(this@MapActivity, site)
                 }
                 negativeButton(R.string.modify) {
-                    startActivity<AddressActivity>(AddressActivity.Key_Site to site, AddressActivity.Key_Province to province)
+                    startActivityForResult<AddressActivity>(RequestCode_Address, AddressActivity.Key_Site to site, AddressActivity.Key_Province to province)
                 }
             }.show()
         } else {

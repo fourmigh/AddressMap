@@ -1,5 +1,6 @@
 package org.caojun.addressmap.activity
 
+import android.app.Activity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
@@ -18,10 +19,8 @@ import org.caojun.areapicker.OnPickerClickListener
 import org.caojun.areapicker.PickerData
 import org.jetbrains.anko.doAsync
 import com.amap.api.services.geocoder.GeocodeQuery
-import org.caojun.activity.BaseAppCompatActivity
 
-
-class AddressActivity : BaseAppCompatActivity() {
+class AddressActivity : BaseActivity() {
 
     companion object {
         const val Key_Site = "Key_Site"
@@ -170,6 +169,7 @@ class AddressActivity : BaseAppCompatActivity() {
                     } else {
                         SiteDatabase.getDatabase(this@AddressActivity).getSiteDao().update(site)
                     }
+                    setResult(Activity.RESULT_OK)
                     finish()
                 }
             }

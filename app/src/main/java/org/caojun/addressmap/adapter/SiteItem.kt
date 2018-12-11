@@ -10,6 +10,7 @@ import org.caojun.activity.BaseAppCompatActivity
 import org.caojun.adapter.bean.AdapterItem
 import org.caojun.addressmap.R
 import org.caojun.addressmap.activity.AddressActivity
+import org.caojun.addressmap.activity.AddressListActivity
 import org.caojun.addressmap.room.Site
 import org.caojun.addressmap.utils.GDMapUtils
 import org.jetbrains.anko.startActivity
@@ -54,9 +55,12 @@ class SiteItem(private val context: Context): AdapterItem<Site> {
             btnAddress?.visibility = View.VISIBLE
 
             btnAddress?.setOnClickListener {
-//                GDMapUtils.doNavigate(context, t)
                 GDMapUtils.moveMap(t)
-                (context as Activity).finish()
+                val activity = context as AddressListActivity
+                if (activity.isDataChanged) {
+                    activity.setResult(Activity.RESULT_OK)
+                }
+                activity.finish()
             }
         }
 
