@@ -19,6 +19,9 @@ class Site : Parcelable {
     var mobile: String = ""//手机号
     var area: String = ""//所在地区（省市区）
     var address: String = ""//详细地址
+    var adCode: String = ""//行政区划代码
+    var areaCode: String = ""//区号
+    var zipCode: String = ""//邮编
     var latitude: Double = 0.0
     var longitude: Double = 0.0
 
@@ -28,6 +31,9 @@ class Site : Parcelable {
         dest.writeString(mobile)
         dest.writeString(area)
         dest.writeString(address)
+        dest.writeString(adCode)
+        dest.writeString(areaCode)
+        dest.writeString(zipCode)
         dest.writeDouble(latitude)
         dest.writeDouble(longitude)
     }
@@ -44,6 +50,9 @@ class Site : Parcelable {
         mobile = _in.readString()
         area = _in.readString()
         address = _in.readString()
+        adCode = _in.readString()
+        areaCode = _in.readString()
+        zipCode = _in.readString()
         latitude = _in.readDouble()
         longitude = _in.readDouble()
     }

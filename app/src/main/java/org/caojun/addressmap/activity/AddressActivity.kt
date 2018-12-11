@@ -26,6 +26,9 @@ class AddressActivity : BaseAppCompatActivity() {
     }
 
     private var site: Site? = null
+    private var adCode = ""
+    private var areaCode = ""
+    private var zipCode = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,21 +40,30 @@ class AddressActivity : BaseAppCompatActivity() {
 
         AreaPicker.init(this, btnArea, object : OnPickerClickListener {
             override fun onPickerClick(pickerData: PickerData) {
-                btnArea.text = pickerData.selectText
-                AreaPicker.dismiss()
+                onPicker(pickerData)
             }
 
             override fun onPickerConfirmClick(pickerData: PickerData) {
-                btnArea.text = pickerData.selectText
-                AreaPicker.dismiss()
+                onPicker(pickerData)
             }
         }, province)
 
         site = intent.getParcelableExtra(Key_Site)
+        adCode = site?.adCode?:""
+        areaCode = site?.areaCode?:""
+        zipCode = site?.zipCode?:""
         etName.setText(site?.name)
         etMobile.setText(site?.mobile)
         btnArea.text = site?.area
         etAddress.setText(site?.address)
+    }
+
+    private fun onPicker(pickerData: PickerData) {
+        btnArea.text = pickerData.selectText
+        adCode = pickerData.adCode?:""
+        areaCode = pickerData.areaCode?:""
+        zipCode = pickerData.zipCode?:""
+        AreaPicker.dismiss()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -85,6 +97,9 @@ class AddressActivity : BaseAppCompatActivity() {
             site?.mobile = etMobile.text.toString()
             site?.area = btnArea.text.toString()
             site?.address = etAddress.text.toString()
+            site?.adCode = adCode
+            site?.areaCode = areaCode
+            site?.zipCode = zipCode
 
             searchGEO(isNew, site!!)
         }
@@ -113,7 +128,7 @@ class AddressActivity : BaseAppCompatActivity() {
                 }
             }
         })
-        val query = GeocodeQuery(site.address, site.area)
+        val query = GeocodeQuery(site.address, site.adCode)
         geocodeSearch.getFromLocationNameAsyn(query)
     }
 }

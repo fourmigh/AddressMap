@@ -54,15 +54,24 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
             override fun onSuccess() {
                 mapView.onCreate(savedInstanceState)
                 initialize()
-                addMarkersToMap()
+//                refreshData()
             }
 
             override fun onFail() {
             }
         })
+    }
 
+    private fun refreshData() {
         doAsync {
             val list = SiteDatabase.getDatabase(this@MapActivity).getSiteDao().queryAll()
+            val aMap = mapView.map
+            aMap.clear()
+            GDMapUtils.clear()
+            hmMarkerSite.clear()
+            for (i in list.indices) {
+                addMarkerToMap(aMap, list[i])
+            }
             uiThread {
                 listView.adapter = object : CommonAdapter<Site>(list, 1) {
                     override fun createItem(type: Any?): AdapterItem<*> {
@@ -76,6 +85,7 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
     override fun onResume() {
         super.onResume()
         mapView.onResume()
+        refreshData()
     }
 
     override fun onPause() {
@@ -175,19 +185,6 @@ class MapActivity : BaseAppCompatActivity(), LocationSource, AMapLocationListene
             marker.showInfoWindow()
         }
         return true
-    }
-
-    private fun addMarkersToMap() {
-        doAsync {
-            val list = SiteDatabase.getDatabase(this@MapActivity).getSiteDao().queryAll()
-            val aMap = mapView.map
-            aMap.clear()
-            GDMapUtils.clear()
-            hmMarkerSite.clear()
-            for (i in list.indices) {
-                addMarkerToMap(aMap, list[i])
-            }
-        }
     }
 
     private fun addMarkerToMap(aMap: AMap, site: Site) {
